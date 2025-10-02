@@ -148,7 +148,6 @@ pv_long_bma <- map2_dfr(
 
 # BART ---------------------------------------------------------------------
 
-
 K <- 10
 n_total <- nrow(bg_numeric)
 pv_results <- vector("list", nrow(sim_params_bart))
@@ -246,20 +245,6 @@ kld_OG <- pv_long_og %>%
   summarise(kld = KLD(OG_PV, bg_numeric$true_score)$sum.KLD.px.py)
 
 
-# 
-# bg_numeric <- bg_numeric %>% 
-#   mutate(obs = row_number(),
-#          true_score = bg_data$bg$theta * 100 + 500) 
-# 
-# bg_numeric_10 <- bind_rows(replicate(10, bg_numeric, simplify = FALSE))
-# 
-# 
-# (combined_pv <- pv_long_og %>%
-#     full_join(pv_long_bma,  by = c("obs", "PV")) %>%
-#     full_join(pv_long_bart, by = c("obs", "PV")) %>%
-#     bind_cols(bg_numeric_10 %>% select(-obs)))
-
-
 mean_BMA <- pv_long_bma %>%
   group_by(PV, gprior, mprior) %>%
   summarise(mean_value = mean(value), .groups = "drop")
@@ -294,28 +279,6 @@ sd_true <- sd(bg_numeric$true_score)
 
 
 
-
-# fit_bart <- brm(BART_PV ~ q142 + q256 + q303 + q22 + q205 + q118 + q133 + q102 + q235, data = combined_pv)
-# fit_bma <- brm(BMA_PV ~ q142 + q256 + q303 + q22 + q205 + q118 + q133 + q102 + q235, data = combined_pv)
-# fit_og <- brm(OG_PV ~ q142 + q256 + q303 + q22 + q205 + q118 + q133 + q102 + q235, data = combined_pv)
-# fit_true <- brm(true_score ~ q142 + q256 + q303 + q22 + q205 + q118 + q133 + q102 + q235, data = combined_pv)
-# 
-# loo_bart <- loo(fit_bart)
-# loo_bma <- loo(fit_bma)
-# loo_og <- loo(fit_og)
-# loo_true <- loo(fit_true)
-# 
-# loo_list <- list(loo_bart, loo_bma, loo_og, loo_true)
-# loo_compare_obj <- loo_compare(loo_bart, loo_bma, loo_og, loo_true)
-# 
-# coef_bart  <- as.data.frame(fixef(fit_bart)) %>% rownames_to_column("term") %>% mutate(model = "BART")
-# coef_bma   <- as.data.frame(fixef(fit_bma))  %>% rownames_to_column("term") %>% mutate(model = "BMA")
-# coef_og    <- as.data.frame(fixef(fit_og))   %>% rownames_to_column("term") %>% mutate(model = "Original PV")
-# coef_true  <- as.data.frame(fixef(fit_true)) %>% rownames_to_column("term") %>% mutate(model = "True Score")
-# 
-# coef_all <- bind_rows(coef_bart, coef_bma, coef_og, coef_true)
-
-
 # Save Results ---------------------------------------------------------------------
 
 sesssion_info <- sessionInfo()
@@ -328,3 +291,4 @@ save(my.seed,
      sd_bart, sd_BMA, sd_OG, sd_true, 
      kld_bart, kld_BMA, kld_OG,
      file = file_name)
+
