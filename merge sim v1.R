@@ -6,14 +6,11 @@ library(ggridges)
 library(viridis)
 
 
-# fix colors
-
 path <- "C:/Users/harra.AD/OneDrive - UW-Madison/Documents/PVs/cthc/sim results v2 1000 10pvs"
 files <- list.files(path = path)
 setwd(path)
 all <- lapply(files, function(x) mget(load(x)))
 
-# mean and sd of PV1 compared to true score
 
 pv_all <- map(all, "mean_pv") %>%
   bind_rows(.id = "replication")
@@ -32,8 +29,6 @@ pv_all <- map(all, "mean_pv") %>%
     bias_perc = (mean_of_means - true_mean) / true_mean * 100,
     .groups = "drop"
   ) %>% arrange(desc(abs(bias_perc))))
-
-
 
 
 pv_all_sd <- map(all, "sd_pv") %>%
@@ -358,3 +353,4 @@ ggplot(loo_plot, aes(x = model, y = looic,  fill = model)) +
         axis.text.x = element_text(angle = 45, hjust = 1))
 
 ggsave("C:/Users/harra.AD/OneDrive - UW-Madison/Documents/PVs/v2_loo_10pv.png", bg = "white", width = 10, height = 7)
+
