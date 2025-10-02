@@ -1,0 +1,30 @@
+FROM rocker/r-ver:4.5.1
+MAINTAINER "Kjorte Harra" kjorteh@gmail.com
+
+# Install required system dependencies
+RUN apt-get update \
+    && apt-get install -y \
+        libssl-dev \
+        libcurl4-openssl-dev \
+        libxml2-dev \
+        libomp-dev \
+        libglpk-dev
+
+# Install R packages
+RUN install2.r --error \
+    lsasim \
+    TAM \
+    brms \
+    BMS \
+    loo \ 
+    dplyr \
+    tidyverse \
+    BART \ 
+    LaplacesDemon
+
+# Install rstanarm after installing igraph
+# RUN install2.r --error \
+ #   rstanarm  
+
+# RUN R -e "install.packages(c('lsasim', 'TAM', 'brms', 'BMS', 'loo','dplyr', 'tidyverse', 'BART', 'LaplacesDemon'), repos='https://cloud.r-project.org/')"
+

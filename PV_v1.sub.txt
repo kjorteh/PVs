@@ -1,0 +1,28 @@
+# R build file
+
+universe = docker
+docker_image = kharra/sim_pv:v1
+log = /home/harra/logerr/cluster_$(Cluster).log
+error = /home/harra/logerr/cluster_$(Cluster)_$(Process).err
+
+
+executable = run_pv_v1.sh 
+arguments = $(Process)
+output = /home/harra/logerr/cluster_$(Cluster)_$(Process).out
+error = /home/harra/logerr/cluster_$(Cluster)_$(Process).err
+initialdir = PVs_v1
+
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+transfer_input_files = sim_pv_v1.R
+transfer_output_remaps = "sim_res.Rdata = /home/harra/regStacking/sim_res_$(Process).Rdata"
+# The syntax is transfer_output_remaps = "FileCreatedInJob = /path/to/save/file/NewNameOfFile"
+
+
+request_cpus = 1
+request_memory = 12GB 
+request_disk = 700MB
+
+
+queue 2
