@@ -1,0 +1,29 @@
+universe = docker
+docker_image = kharra/pisa_sparsity:v3
+
+log = /home/harra/logerr/cluster_$(Cluster).log
+output = /home/harra/logerr/cluster_$(Cluster)_$(country).out
+error = /home/harra/logerr/cluster_$(Cluster)_$(country).err
+
+initialdir = /home/harra/pisa_spars
+
+executable = run_pisa.sh
+arguments = $(country)
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+transfer_input_files = run_pisa.sh, \
+                       Sparsity_PISA_HTC.R, \
+                       pisa_testing_anchor_subset.RData, \
+                       QQQ/data_CNT_$(country)_QQQ.sav, \
+                       COG/data_CNT_$(country)_COG.sav
+
+transfer_output_files = pv_spars_pisa_$(country).Rdata
+
+request_cpus = 1
+request_memory = 16GB
+request_disk = 12GB
+
+queue country from /home/harra/pisa_spars/country_list.txt
+
